@@ -1,0 +1,65 @@
+snippet int
+<?php
+
+namespace App\Interfaces\\$1`!p
+t[1] = t[1].replace(' ', '\\')
+`;
+
+interface $2Interface
+{
+
+
+}
+endsnippet
+
+snippet class
+<?php
+
+namespace App\\$1`!p
+t[1] = t[1].replace(' ', '\\')
+`;
+
+class $2
+{
+
+
+}
+endsnippet
+
+snippet repo
+<?php
+namespace App\Repositories;
+
+use App\\$1;
+use Illuminate\Http\Request;
+use App\Repositories\BaseRepository;
+use App\Interfaces\\$1Interface;
+
+class $1Repository extends BaseRepository implements $1Interface {
+
+  protected $modelName = 'App\\$1';
+
+}
+endsnippet
+
+snippet transformer
+<?php
+
+namespace App\Transformers;
+
+use League\Fractal;
+use App\\$1;
+use Spatie\Fractalistic\ArraySerializer;
+
+class $1Transformer extends Fractal\TransformerAbstract {
+
+  public function transform($1 $$2) {
+		return [
+			'id' => $$2->id,
+			'created_at' => $$2->created_at->toDateTimeString(),
+			'updated_at' => $$2->updated_at->toDateTimeString()
+		];
+  }
+
+}
+endsnippet

@@ -1,0 +1,709 @@
+extends phpclasses
+
+snippet t.
+$this->
+endsnippet
+
+snippet dd
+dd($${1:${VISUAL}});
+endsnippet
+
+snippet du
+dump($${1:${VISUAL}});
+endsnippet
+
+snippet vd
+var_dump($$1);
+endsnippet
+
+snippet vdd
+var_dump($$1);
+die();
+endsnippet
+
+snippet f
+${1:public} function $2($3)
+{
+  $4
+}
+endsnippet
+
+snippet construct
+public function __construct($1)
+{`!p
+args = t[1].split(', ')
+for arg in args:
+    vals = arg.split(' $')
+    if len(vals) >= 2 and vals[1] != '':
+        snip.rv += "\n    $this->" + vals[1] + " = $" + vals[1] + ";"
+`
+}
+endsnippet
+
+snippet use
+use $1`!p
+t[1] = t[1].replace(' ', '\\')
+`;
+endsnippet
+
+snippet priv
+private $$1
+endsnippet
+
+snippet fkcon
+Schema::disableForeignKeyConstraints();
+Schema::enableForeignKeyConstraints();
+endsnippet
+
+snippet fk
+$table->integer('$1')->unsigned();
+
+$table->foreign('$1')
+	  ->references('${2:`!p
+snip.rv = t[1].split("_")[-1]
+       `}')
+	  ->on('${3:`!p
+snip.rv = "_".join(t[1].split("_")[:-1]) + "s"
+       `}');
+endsnippet
+
+snippet dfk
+$table->dropForeign(['$1']);
+$table->dropColumn(['$1']);
+endsnippet
+
+snippet dc
+$table->dropColumn(['$1']);
+endsnippet
+
+snippet doc
+/**
+ * ${1:undocumented function}
+ *
+ * @param $2
+ * @return $3
+ */
+endsnippet
+
+# snippet docf
+# /**
+#  * ${1:undocumented function}
+#  *
+#  * @param $2
+#  * @return $3
+#  */
+# ${4:public} function $5(`!p
+# params = t[2].splitlines()
+# paramBag = []
+# for param in params:
+#     vals = param.split(' ')
+# 	if len(vals) >= 2 and (vals[-2] != '*' and vals[-2] != '@param'):
+# 		klass = vals[-2].split('\\')[-1]
+# 		var = vals[-1]
+# 		paramBag.append(klass + " " + var)
+# 		snip.rv = ", ".join(paramBag)
+# `)
+# {
+#     $0
+# }
+# endsnippet
+
+snippet app
+\App\
+endsnippet
+
+snippet route
+Route::$1('/$2', '$3Controller@$4');
+endsnippet
+
+snippet if
+if ($1) {
+    $2
+}
+endsnippet
+
+snippet switch
+switch ($${1:variable})
+{
+	case '${2:value}':
+		${3}
+		break;
+		${0}
+	default:
+		${4}
+		break;
+}
+endsnippet
+
+snippet schema
+Schema::${1:table}('$2', function (Blueprint $table) {
+    $table->$3
+});
+endsnippet
+
+snippet foreach
+foreach ($$1 as $${2:`!p snip.rv = t[1][:-1]`}) {
+    $3
+}
+endsnippet
+
+snippet try
+try {
+    $1
+} catch (\Exception $e) {
+	$2
+}
+endsnippet
+
+snippet fill
+protected $fillable = [
+	'$1'
+];
+endsnippet
+
+snippet res
+return $this->response->success($1);
+endsnippet
+
+snippet eres
+return response()->json([
+	'success' => false,
+	'message' => '$1'
+], 200);
+endsnippet
+
+snippet rel
+public function $1()
+{
+	return $this->${2:belongsTo}('App\\${1/\w+\s*/\u$0/}');
+}
+endsnippet
+
+snippet t
+$this
+endsnippet
+
+snippet ddr
+dd($response);
+endsnippet
+
+snippet ddrc
+dd(json_decode($response->getContent(), true));
+endsnippet
+
+snippet ddh
+dd('here');
+endsnippet
+
+snippet for
+for ($${2:i} = 0; $$2 < ${1:count}; $$2${3:++}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet index
+/**
+ * Display a listing of the resource.
+ *
+ * @param  \Illuminate\Http\Request  $request$2
+ * @return \Illuminate\Http\Response
+ */
+public function index(Request $request$1)
+{
+	$3
+}
+endsnippet
+
+snippet show
+/**
+ * Display the specified resource.
+ *
+ * @param  \Illuminate\Http\Request  $request$2
+ * @return \Illuminate\Http\Response
+ */
+public function show(Request $request$1)
+{
+	$3
+}
+endsnippet
+
+snippet store
+/**
+ * Store a newly created resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request$2
+ * @return \Illuminate\Http\Response
+ */
+public function store(Request $request$1)
+{
+	$3
+}
+endsnippet
+
+snippet update
+/**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request$2
+ * @return \Illuminate\Http\Response
+ */
+public function update(Request $request$1)
+{
+	$3
+}
+endsnippet
+
+snippet destroy
+/**
+* Remove the specified resource from storage.
+ *
+ * @param  \Illuminate\Http\Request  $request$2
+ * @return \Illuminate\Http\Response
+ */
+public function destroy(Request $request$1)
+{
+	$3
+}
+endsnippet
+
+snippet restore
+/**
+ * Restore the specified resource in storage.
+ *
+ * @param  String  $$1
+ * @return \Illuminate\Http\Response
+ */
+public function restore($$1)
+{
+	$2
+}
+endsnippet
+
+snippet group
+Route::group(['prefix' => '$1'], function () {
+	$2
+});
+endsnippet
+
+snippet res_interface
+protected $response;
+
+public function __construct(ResponseInterface $response)
+{
+	$this->response = $response;
+}
+endsnippet
+
+snippet routes
+Route::group(['prefix' => '$1'], function () {
+    Route::get('/', '$2Controller@index');
+    Route::post('/', '$2Controller@store');
+    Route::get('/{$3}', '$2Controller@show');
+    Route::patch('/{$3}', '$2Controller@update');
+    Route::delete('/{$3}', '$2Controller@destroy');
+    Route::get('/{$3}/restore', '$2Controller@restore');
+});
+endsnippet
+
+snippet sd
+use Illuminate\Database\Eloquent\SoftDeletes;
+use SoftDeletes;
+endsnippet
+
+snippet throw
+throw new \Exception($1)
+endsnippet
+
+#snippet get
+#/**
+#* Gets the value of ${1:foo}
+#*
+#* @return ${2:string}
+#*/
+#${3:public} function get`!p
+#snip.rv = t[1].capitalize()
+#`()
+#{
+#}
+#endsnippet
+
+snippet get
+/**
+ * Getter for $1
+ *
+ * @return ${2:string}
+ */
+public function get${1/\w+\s*/\u$0/}()
+{
+    return $this->$1;
+}
+endsnippet
+
+snippet mget
+public function __get($property)
+{
+	if (property_exists($this, $property)) {
+		return $this->$property;
+	}
+
+	return null;
+}
+endsnippet
+
+snippet set
+/**
+ * Setter for $1
+ *
+ * @param ${2:string} $$1
+ * @return ${3:self}
+ */
+public function set${1/\w+\s*/\u$0/}($$1)
+{
+    $this->$1 = $$1;
+
+	return $this;
+}
+endsnippet
+
+snippet gs
+/**
+ * Getter for $1
+ *
+ * @return ${2:string}
+ */
+public function get${1/\w+\s*/\u$0/}()
+{
+    return $this->$1;
+}
+
+/**
+ * Setter for $1
+ *
+ * @param ${2:string} $$1
+ * @return ${3:self}
+ */
+public function set${1/\w+\s*/\u$0/}($$1)
+{
+    $this->$1 = $$1;
+
+	return $this;
+}
+endsnippet
+
+snippet bind
+$this->app->bind('App\\Interfaces\\$1Interface', 'App\\Repositories\\$1Repository');
+endsnippet
+
+snippet i_f
+${1:public} function $2($3);
+endsnippet
+
+snippet ifis
+if(isset($$1['$2'])) {
+	$3
+}
+endsnippet
+
+snippet np
+namespace $1`!p
+t[1] = t[1].replace(' ', '\\')
+`;
+endsnippet
+
+snippet insert
+\DB::table('$1')->insert([
+	['$2' => '$3']
+]);
+endsnippet
+
+snippet where
+\App\\$1::where('$2', $$3)->${4:first()};
+endsnippet
+
+snippet var
+/**
+ * @var $1
+ */
+${2:private} $$3
+endsnippet
+
+snippet find
+\App\\$1::find($2);
+endsnippet
+
+snippet validate
+$validatedData = $request->validate([
+	'${1:body}' => 'required',
+]);
+endsnippet
+
+snippet debug
+\Log::channel('debugging')->info(json_encode($1));
+endsnippet
+
+snippet log
+\Log::channel('$1')->info($2);
+endsnippet
+
+snippet scope
+public function scope$1($query)
+{
+	return $query->${2:where}($3);
+}
+endsnippet
+
+snippet abs
+abstract ${1:public} function $2($3);
+endsnippet
+
+snippet jt
+$table->integer('$1_id')->unsigned();
+$table->integer('$2_id')->unsigned();
+
+$table->foreign('$1_id')
+	  ->references('id')
+	  ->on('${3:`!p
+snip.rv = t[1] + "s"
+	  `}')
+	  ->onDelete('cascade');
+
+$table->foreign('$2_id')
+	  ->references('id')
+	  ->on('${4:`!p
+snip.rv = t[2] + "s"
+	  `}')
+	  ->onDelete('cascade');
+
+$table->primary(['$1_id', '$2_id']);
+endsnippet
+
+snippet factory
+$factory->define(App\\$1::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+		$2
+    ];
+});
+endsnippet
+
+snippet eot
+<<<EOT
+$1
+EOT;
+endsnippet
+
+snippet with
+$this->with([
+	'$1' => $2,
+]);
+endsnippet
+
+snippet mail
+use Illuminate\Support\Facades\Mail;
+Mail::to($email->address)->send(new ${1:class});
+endsnippet
+
+snippet foc
+$$1 = \App\\${2:`!p
+snip.rv = t[1].capitalize()
+`}::firstOrCreate(['$3' => '$4']);
+endsnippet
+
+snippet make
+\App::make($1::class);
+endsnippet
+
+snippet gate
+if (\Gate::denies('$1', $$2)) {
+	$0;
+}
+endsnippet
+
+snippet trait
+<?php
+
+namespace App\Traits$1;
+
+trait $2
+{
+	$0
+}
+endsnippet
+
+# Testing
+snippet test
+/** @test */
+public function $1`!p
+t[1] = t[1].replace(' ', '_')
+`()
+{
+	$2
+}
+endsnippet
+
+snippet it
+/** @test */
+public function it_$1`!p
+t[1] = t[1].replace(' ', '_')
+`()
+{
+	$2
+}
+endsnippet
+
+snippet vcr
+/**
+ * @vcr $1
+ * @test
+ */
+public function it_$2`!p
+t[2] = t[2].replace(' ', '_')
+`()
+{
+	$0
+}
+endsnippet
+
+snippet adb
+$this->assertDatabaseHas('$1', [
+	'$2' => $$3,
+]);
+endsnippet
+
+snippet fac
+factory(\App\\$1::class)->create($2);
+endsnippet
+
+snippet json
+$${1:response} = $this->json(
+	'${2:POST}',
+	'/api/$3',
+	$${4:request}
+);
+endsnippet
+
+snippet ajson
+$${1:response}
+	->assertStatus(200)
+	->assertJson([
+		'$2' => $3
+	]);
+endsnippet
+
+snippet setup
+use \Illuminate\Foundation\Testing\DatabaseTransactions;
+
+public function setUp()
+{
+	parent::setUp();
+}
+endsnippet
+
+snippet ti
+$this->markTestIncomplete('$1');
+endsnippet
+
+snippet ts
+$this->markTestSkipped('$1');
+endsnippet
+
+snippet sr
+$${1:mock}
+	->shouldReceive('${2:method}')
+	->once()
+	->with($${3:args})
+	->andReturn($${4:retval});
+endsnippet
+
+snippet ae
+$this->assertEquals($1, $2);
+endsnippet
+
+snippet ee
+$this->expectException(${1:\Exception}::class);
+endsnippet
+
+snippet conrec
+/** @test */
+public function it_can_receive_the_$1_in_the_constructor`!p
+t[1] = t[1].replace(' ', '_')
+`()
+{
+	$$2 = new $3($$4);
+
+	$this->assertEquals($$4, $$2->get${4/\w+\s*/\u$0/}());
+}
+endsnippet
+
+snippet mo
+\Mockery::on(function($arg) use ($$1) {
+	return $arg->id == $$1->id;
+})
+endsnippet
+
+snippet time
+Carbon::setTestNow(Carbon::now());
+endsnippet
+
+snippet any
+\Mockery::any()
+endsnippet
+
+snippet at
+$this->assertTrue($1);
+endsnippet
+
+snippet af
+$this->assertFalse($1);
+endsnippet
+
+snippet ma
+$${1:mock} = $this->getMockForAbstractClass(${2:Class}::class);
+endsnippet
+
+snippet tmail
+use Illuminate\Support\Facades\Mail;
+Mail::fake();
+Mail::assertSent(${1:class}::class, function ($mail) use ($$2) {
+	return $mail->$2->id === $$2->id;
+});
+endsnippet
+
+snippet provider
+public function provider$2()
+{
+	return [
+		['$3'],
+	];
+}
+
+/**
+ * @test
+ * @dataProvider provider$2
+ **/
+public function it_$1`!p
+t[1] = t[1].replace(' ', '_')
+`()
+{
+	$0
+}
+endsnippet
+
+snippet testclass
+<?php
+
+use PHPUnit\Framework\TestCase;
+
+class $1Test extends TestCase
+{
+	$0
+}
+endsnippet
+
+snippet aio
+$this->assertInstanceOf($2::class, $2);
+endsnippet
+
+snippet an
+$this->assertNull($1);
+endsnippet

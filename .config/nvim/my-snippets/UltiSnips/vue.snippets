@@ -1,0 +1,35 @@
+extends html, javascript
+
+snippet http
+this.$http.$1('/api/$2', {$3}).then( response => {
+  $4
+}, e => {
+	$5
+});
+endsnippet
+
+snippet f
+$1: function($2) {
+  $3
+},
+endsnippet
+
+snippet vshow
+v-show="$1"
+endsnippet
+
+snippet vmodel
+v-model="$1"
+endsnippet
+
+snippet vfor
+v-for="$1"
+endsnippet
+
+snippet click
+@click.prevent="$1"
+endsnippet
+
+snippet {
+{{ $1 }}
+endsnippet

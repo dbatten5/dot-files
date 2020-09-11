@@ -1,0 +1,78 @@
+snippet .
+class="$1"
+endsnippet
+
+snippet html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+	<title></title>
+
+	<link rel="stylesheet" href="css/styles.css?v=1.0">
+
+</head>
+
+<body>
+
+</body>
+</html>
+endsnippet
+
+snippet #
+id="$1"
+endsnippet
+
+snippet php
+<?php
+	$1
+?>
+endsnippet
+
+snippet a
+<a href="${1:#}">$2</a>
+endsnippet
+
+snippet br
+<br />
+endsnippet
+
+snippet b
+<b>$1</b>
+endsnippet
+
+snippet button.
+<button class="$1" type="${2:submit}">$3</button>
+endsnippet
+
+snippet table
+<table>
+	<thead>
+		<tr>
+			<td>$1</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>$2</td>
+		</tr>
+	</tbody>
+</table>
+endsnippet
+
+snippet t
+{{t '$0' }}
+endsnippet
+
+snippet space
+<spacer size="$0" />
+endsnippet
+
+snippet line
+{{> _line }}
+endsnippet
+
+snippet trans
+{{translate page '`!v expand("%:t:r")`.$2'}}
+endsnippet

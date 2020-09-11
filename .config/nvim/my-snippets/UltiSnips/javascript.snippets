@@ -1,0 +1,160 @@
+extends p5
+extends vue
+
+snippet cl
+console.log($1);
+endsnippet
+
+snippet f
+function $1() {
+	$2
+}
+endsnippet
+
+snippet con
+function __construct($1) {
+`!p snip >> 1
+args = t[1].split(', ')
+paramBag = []
+for arg in args:
+    if arg.strip():
+		paramBag.append("this." + arg + " = " + arg)
+		snip.rv = snip.mkline("\n    ".join(paramBag))
+`
+}
+endsnippet
+
+snippet class
+class $1 {
+
+	constructor($2) {
+`!p snip >> 2
+args = t[2].split(', ')
+paramBag = []
+for arg in args:
+    if arg.strip():
+		paramBag.append("this." + arg[0] + " = " + arg)
+		snip.rv = snip.mkline("\n        ".join(paramBag))
+`
+	}
+
+}
+endsnippet
+
+snippet of
+for (const $1 of ${2:$1s}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet for
+for (let ${1:i} = 0; $1 < $2; $1++) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet if
+if ($1) {
+	$2
+}
+endsnippet
+
+snippet t.
+this.
+endsnippet
+
+snippet mut
+$1`!p
+t[1] = t[1].replace(' ', '_').upper()
+`: (state, payload) => {
+	state.$2 = payload;
+},
+endsnippet
+
+snippet com
+commit('$1`!p
+t[1] = t[1].replace(' ', '_').upper()
+`', $2);
+endsnippet
+
+snippet api
+api.$1(payload)
+	.then(response => {
+		$2
+	})
+	.catch(err => {
+		console.log(err);
+		$3
+	});
+endsnippet
+
+snippet cx
+import cx from 'classnames';
+endsnippet
+
+snippet component
+// @flow
+import React from 'react';
+import css from './`!v expand("%:t:r")`.css';
+
+type Props = {
+
+};
+
+const `!v expand("%:t:r")` = ({}: Props) => {
+  return (
+		$0
+  );
+};
+
+export default `!v expand("%:t:r")`;
+endsnippet
+
+snippet test
+test('$1', () => {
+	$0
+});
+endsnippet
+
+snippet t
+{t('$0')}
+endsnippet
+
+snippet div
+<div className={css.$1}>
+	$0
+</div>
+endsnippet
+
+snippet cn
+className={css.$0}
+endsnippet
+
+snippet trans
+import i18n from 'utils/i18n/i18n';
+const t = i18n.withPrefix('client.$1.components.$0');
+endsnippet
+
+snippet ss
+this.setState({
+	$1: $0,
+});
+endsnippet
+
+# testing
+
+snippet describe
+describe('$1', () => {
+	$0
+});
+endsnippet
+
+snippet it
+it('$1', () => {
+	$0
+});
+endsnippet
+
+snippet expect
+expect($1).toEqual(${0:true});
+endsnippet

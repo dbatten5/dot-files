@@ -1,0 +1,113 @@
+snippet join
+join $1 as ${2:`!p
+snip.rv = ''.join(x[0] for x in t[1].split('_') if len(x) > 0)
+`}
+	on $3.${4:`!p snip.rv = t[1][:-1]`}_id = $2.id
+endsnippet
+
+snippet day
+date($1) = date(now())
+endsnippet
+
+snippet week
+yearweek($1, 1) = yearweek(curdate(), 1) and year($1) = year(curdate())
+endsnippet
+
+snippet month
+month($1) = month(curdate()) and year($1) = year(curdate())
+endsnippet
+
+snippet year
+year($1) = year(curdate())
+endsnippet
+
+snippet sumcase
+case when $1 = $2 then 1 else 0 end
+endsnippet
+
+snippet between
+between $1 and $2
+endsnippet
+
+snippet select
+select
+	${1:*}
+from
+	$2 as ${3:`!p snip.rv = t[2][:1]`}
+endsnippet
+
+snippet like
+like '%${0:${VISUAL:test}}%'
+endsnippet
+
+snippet c
+/* $1 */$0
+endsnippet
+
+snippet create
+create table if not exists $1 (
+    id int,
+	$0,
+    primary key (id)
+);
+endsnippet
+
+snippet fk
+$1 int,
+foreign key ($1) references $2(${3:id}),
+endsnippet
+
+snippet vc
+varchar(255),
+endsnippet
+
+snippet proc
+delimiter //
+
+drop procedure if exists $1//
+
+create procedure $1($2)
+begin
+	$0
+end//
+endsnippet
+
+snippet staging
+select
+    $2.id as id
+	, $0
+    , %(window_start_date)s
+from
+	$1 as ${2:t}
+where
+	$2.updated_at >= %(window_start_date)s
+	and $2.updated_at < %(window_end_date)s
+;
+endsnippet
+
+snippet fact
+delete f$2
+from
+    dwh.fact_$1 as f$2
+join staging.$1 as $2
+    on f$2.$3_id = $2.$3_id
+where
+	$2.partition_dtm >= '{{ ds }}'
+	and $2.partition_dtm < '{{ next_ds }}'
+;
+
+insert into dwh.fact_$1 (
+	$3_id
+	,
+)
+select
+	$2.$3_id
+	,
+from
+    staging.$1 as $2
+    {{ macros.mettrr.construct_dim_join('$2', [$0]) }}
+where
+    $2.partition_dtm >= %(window_start_date)s
+    and $2.partition_dtm < %(window_end_date)s
+;
+endsnippet

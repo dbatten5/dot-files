@@ -1,0 +1,87 @@
+snippet batch_alter
+with op.batch_alter_table('$1') as batch_op:
+    batch_op.${2:add_column(sa.Column('$3', sa.$4))}
+endsnippet
+
+snippet new_cols
+from sqlalchemy.dialects.mysql import TINYINT
+with op.batch_alter_table('$1', schema='dwh') as batch_op:
+	batch_op.add_column(sa.Column('$3', ${4:TINYINT}))
+
+with op.batch_alter_table('$2', schema='staging') as batch_op:
+	batch_op.add_column(sa.Column('$3', ${4:TINYINT}))
+
+with op.batch_alter_table('$1', schema='dwh') as batch_op:
+	batch_op.drop_column('$3')
+
+with op.batch_alter_table('$2', schema='staging') as batch_op:
+	batch_op.drop_column('$3')
+endsnippet
+
+snippet new_fact
+op.create_table(
+	'fact_$1',
+	sa.Column('id', sa.Integer, primary_key=True),
+	sa.Column('$1_id', sa.Integer),
+	sa.Column('dim_lead_key', sa.Integer, sa.ForeignKey('dim_lead.lead_key')),
+	sa.Column('dim_customer_key', sa.Integer, sa.ForeignKey('dim_customer.customer_key')),
+	sa.Column('dim_business_key', sa.Integer, sa.ForeignKey('dim_business.business_key')),
+	sa.Column('dim_date_key', sa.Integer, sa.ForeignKey('dim_date.date_key')),
+	sa.Column('$1_date', sa.DateTime),
+	schema='dwh',
+)
+
+op.create_table(
+	'$1',
+	sa.Column('$1_id', sa.Integer),
+	sa.Column('lead_id', sa.Integer),
+	sa.Column('customer_id', sa.Integer),
+	sa.Column('business_id', sa.Integer),
+	sa.Column('$1_date', sa.DateTime),
+	sa.Column('partition_dtm', sa.DateTime),
+	schema='staging',
+)
+
+op.drop_table('fact_$1', schema='dwh')
+op.drop_table('$1', schema='staging')
+endsnippet
+
+snippet new_dim
+op.create_table(
+	'dim_$1',
+	sa.Column('$1_key', sa.Integer, primary_key=True),
+	sa.Column('id', sa.Integer),
+	sa.Column('created_at', sa.DateTime),
+	sa.Column('start_dtm', sa.DateTime),
+	sa.Column('end_dtm', sa.DateTime, server_default='9999-01-01'),
+	schema='dwh',
+)
+
+op.create_table(
+	'$1',
+	sa.Column('id', sa.Integer),
+	sa.Column('created_at', sa.DateTime),
+	sa.Column('partition_dtm', sa.DateTime),
+	schema='staging',
+)
+
+op.drop_table('dim_$1', schema='dwh')
+op.drop_table('$1', schema='staging')
+endsnippet
+
+snippet col
+sa.Column('$1', sa.${2:Integer}),
+endsnippet
+
+snippet new_col
+op.add_column(
+	'$1',
+    sa.Column('$2', sa.${3:Integer}),
+	${4:schema='$5'},
+)
+op.drop_column('$1', '$2', $4)
+endsnippet
+
+snippet fk
+sa.Column('dim_$1_key', sa.Integer, sa.ForeignKey('dim_$1.$1_key')),
+endsnippet

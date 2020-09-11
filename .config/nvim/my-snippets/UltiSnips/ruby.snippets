@@ -1,0 +1,59 @@
+snippet f
+def $1
+	$0
+end
+endsnippet
+
+snippet if
+if $1
+	$0
+end
+endsnippet
+
+snippet sql
+sql = <<-SQL
+
+SQL
+endsnippet
+
+snippet pry
+binding.pry
+endsnippet
+
+# rspec
+
+snippet des
+describe '$1' do
+	$0
+end
+endsnippet
+
+snippet is_exp
+it { is_expected.to be ${1:true} }
+endsnippet
+
+snippet context
+context '$1' do
+	$0
+end
+endsnippet
+
+snippet it
+it '$1' do
+	$0
+end
+endsnippet
+
+snippet describe
+describe '$1' do
+	$0
+end
+endsnippet
+
+snippet rspec
+require 'spec_helper'
+
+RSpec.describe $1 do
+	$0
+end
+endsnippet

@@ -1,0 +1,68 @@
+extends alembic, airflow
+
+snippet for
+for ${1:x} in $2:
+	$0
+endsnippet
+
+snippet if
+if $1:
+	$2
+endsnippet
+
+snippet f
+def $1`!p
+t[1] = t[1].replace(' ', '_')
+`($2):
+	$0
+endsnippet
+
+snippet s.
+self.
+endsnippet
+
+snippet init
+def __init__(self, $1):
+	$2
+endsnippet
+
+snippet class
+class $1:
+	def __init__(self${2:, }):
+		$0
+endsnippet
+
+snippet try
+try:
+	$1
+except Exception as error:
+	$2
+	continue
+endsnippet
+
+snippet print
+print('$1')
+endsnippet
+
+snippet kwargs
+kwargs.get('$1'${2:, ''})
+endsnippet
+
+snippet test
+def test_$1`!p
+t[1] = t[1].replace(' ', '_')
+`():
+	$0
+endsnippet
+
+snippet af
+assert False
+endsnippet
+
+snippet ae
+self.assertEqual($1, $2)
+endsnippet
+
+snippet at
+self.assertTrue($1)
+endsnippet

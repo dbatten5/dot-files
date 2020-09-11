@@ -1,0 +1,83 @@
+snippet join
+join $1 as ${2:`!p
+snip.rv = ''.join(x[0] for x in t[1].split('_') if len(x) > 0)
+`}
+	on $3.${4:`!p snip.rv = t[1][:-1]`}_id = $2.id
+endsnippet
+
+snippet day
+date($1) = date(now())
+endsnippet
+
+snippet week
+yearweek($1, 1) = yearweek(curdate(), 1) and year($1) = year(curdate())
+endsnippet
+
+snippet month
+month($1) = month(curdate()) and year($1) = year(curdate())
+endsnippet
+
+snippet year
+year($1) = year(curdate())
+endsnippet
+
+snippet sumcase
+case when $1 = $2 then 1 else 0 end
+endsnippet
+
+snippet between
+between $1 and $2
+endsnippet
+
+snippet select
+select
+	${1:*}
+from
+	$2 as ${3:`!p snip.rv = t[2][:1]`}
+endsnippet
+
+snippet like
+like '%${0:${VISUAL:test}}%'
+endsnippet
+
+snippet c
+/* $1 */$0
+endsnippet
+
+snippet create
+create table if not exists $1 (
+    id int,
+	$0,
+    primary key (id)
+);
+endsnippet
+
+snippet fk
+$1 int,
+foreign key ($1) references $2(${3:id}),
+endsnippet
+
+snippet vc
+varchar(255)
+endsnippet
+
+snippet dim
+create table if not exists data_warehouse.d_$1 (
+    id int not null auto_increment,
+    $0
+    primary key (id)
+);
+endsnippet
+
+snippet inselect
+insert data_warehouse.d_$1 (
+	id
+	, $2
+)
+select
+    id
+	, $2
+from
+    mettrr_live.$1
+;
+endsnippet

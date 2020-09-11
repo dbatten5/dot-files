@@ -1,0 +1,68 @@
+extends kubernetes
+
+snippet dim
+name: $1
+pattern:
+    extract:
+		sql:
+			template: ${2:new}/$1
+		dependencies:
+			template: staging
+    load:
+		dependencies:
+			template: dimension
+        sql:
+            template: scd_${3:1}
+            params:
+                match_columns:
+					- id
+					- $0
+endsnippet
+
+snippet fact
+name: $1
+pattern:
+    extract:
+		sql:
+			template: ${2:new}/$1
+		dependencies:
+			template: staging
+    load:
+		dependencies:
+			template: fact
+        sql:
+            template: ${2:fact}
+            params:
+				date_keys:
+					- $3
+                dimensions:
+					- $0
+endsnippet
+
+snippet legacy
+name: $1_legacy
+table_name: $1
+pattern:
+    extract:
+        sql:
+            src_connection: mysql_legacy_oltp
+            staging_database: staging_legacy
+            template: legacy/$1
+        dependencies:
+            template: staging
+    load:
+        dependencies:
+            template: dimension
+        sql:
+            template: scd_1
+            staging_database: staging_legacy
+            warehouse: dwh_legacy
+            params:
+                match_columns:
+                    - id
+					- $0
+endsnippet
+
+snippet temp
+{{ template "$1" . }}
+endsnippet

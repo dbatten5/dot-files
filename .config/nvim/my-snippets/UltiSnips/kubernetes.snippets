@@ -1,0 +1,13 @@
+snippet cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: $1-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: $2
+  ports:
+    - port: $3
+      targetPort: ${4:$3}
+endsnippet
